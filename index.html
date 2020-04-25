@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>D3 Page Template</title>
+    <style>
+        body {
+            margin: 0;
+        }
+
+        path {
+            fill: #ccc;
+            stroke: #fff;
+            stroke-width: 1px;
+        }
+
+        path:hover {
+            fill: red;
+        }
+
+        .container {
+            width: 500px;
+            min-height: 860px;
+            margin: 2% auto;
+        }
+
+        div.tooltip {
+            position: absolute;
+            text-align: center;
+            width: 80px;
+            height: 28px;
+            padding: 2px;
+            font: 12px sans-serif;
+            background: lightsteelblue;
+            border: 0px;
+            border-radius: 8px;
+            pointer-events: none;
+        }
+    </style>
+</head>
+
+<body>
+
+
+
+
+    <div class="container" id="map"></div>
+
+
+    <script type="text/javascript" src="d3.js"></script>
+    <script type="text/javascript" src="topojson.js"></script>
+    <script type="text/javascript">
+        var width = 500,
+            height = 860;
+
+        var projection = d3.geoMercator().center([-8.00, 39.60])
+            .scale(7000)
+            .translate([width / 2, height / 2])
+            ,
+            path = d3.geoPath(projection);
+
+        var svg = d3.select("#map").append("svg")
+            .attr("width", width)
+            .attr("height", height);
+        d3.json("caopConcelhos.json")
+            .then(topology => {
+                console.log("topojson", topology)
+                var geojson = topojson.feature(topology, topology.objects.caopConcelhos);
+                console.log("geojson", geojson)
+
+                svg.selectAll("path")
+                    .data(geojson.features)
+                    .enter().append("path")
+                    .attr("d", path);
+            })
+            .catch(console.error);
+
+
+
+
+        // var width = 960,
+        //     height = 480;
+
+        // var svg = d3.select("body").append("svg")
+        //     .attr("width", width)
+        //     .attr("height", height);
+
+        // var projection = d3.geo.equirectangular()
+        //     .scale(153)
+        //     .translate([width / 2, height / 2])
+        //     .precision(.1);
+
+        // var path = d3.geo.path()
+        //     .projection(projection);
+
+        // d3.json("caopTopojson.json", function (error, topology) {
+        //     if (error) throw error;
+
+        //     svg.append("path")
+        //         .datum(topojson.feature(topology, topology.objects.land))
+        //         .attr("d", path)
+        //         .attr("class", "land-boundary");
+
+        // });
+    </script>
+</body>
+
+</html>
