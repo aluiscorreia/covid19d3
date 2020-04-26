@@ -76,7 +76,7 @@
                     .then(data => {
                         // console.log("data", data)
                         // console.log("topojson", topology)
-                        var geojson = topojson.feature(topology, topology.objects.caop);
+                        var geojson = topojson.feature(topology, topology.objects.onlydis);
                         // console.log("geojson", geojson)
                         let maxCases = 0;
                         for (let i = 0; geojson.features.length > i; i++) {
