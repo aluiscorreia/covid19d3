@@ -1,0 +1,34 @@
+body {
+    margin: 0;
+}
+
+path {
+    fill: #fff;
+    stroke: rgba(0, 0, 0, 0.2);
+}
+
+path:hover {
+    stroke: #000;
+}
+
+.container {
+    width: 500px;
+    min-height: 860px;
+    margin: 2% auto;
+}
+
+div.tooltip {
+    position: absolute;
+    padding: 5px;
+    font: 12px sans-serif;
+    background: #ddd;
+    border: solid 1px;
+    border-radius: 4px;
+    pointer-events: none;
+}
+
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding-left: 0;
+}
