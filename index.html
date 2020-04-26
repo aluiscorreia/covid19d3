@@ -11,14 +11,11 @@
 
         path {
             fill: #fff;
-            stroke: rgba(0, 0, 0, 0.1);
-            stroke-width: 1px;
+            stroke: rgba(0, 0, 0, 0.2);
         }
 
         path:hover {
             stroke: #000;
-            /* stroke-width: 1px; */
-            /* position: absolute; */
         }
 
         .container {
@@ -31,28 +28,23 @@
             position: absolute;
             padding: 5px;
             font: 12px sans-serif;
-            background: #aaa;
-            border: 0px;
+            background: #ddd;
+            border: solid 1px ;
             border-radius: 4px;
             pointer-events: none;
         }
 
-        ul,
-        li {
+        ul {
             list-style-type: none;
-            padding-left: 0;
             margin: 0;
+            padding-left: 0;
         }
     </style>
 </head>
 
 <body>
 
-
-
-
     <div class="container" id="map"></div>
-
 
     <script type="text/javascript" src="d3.js"></script>
     <script type="text/javascript" src="topojson.js"></script>
@@ -61,7 +53,7 @@
             height = 860,
             da = new Date();
         dn = new Date();
-        da.setDate(da.getDate() - 1)
+        da.setDate(da.getDate() - 2)
         var url = encodeURI(`https://services.arcgis.com/CCZiGSEQbAxxFVh3/arcgis/rest/services/COVID19_Concelhos_V/FeatureServer/0/query?f=json&where=ConfirmadosAcumulado_Conc>0 AND Data_Conc>=timestamp '${da.toLocaleString().replace(',', '').replace('/', '-')}' AND Data_Conc<=timestamp '${dn.toLocaleString().replace(',', '').replace('/', '-')}'&returnGeometry=false&spatialRel=esriSpatialRelIntersects&outFields=*&orderByFields=ConfirmadosAcumulado_Conc desc&resultOffset=0&resultRecordCount=318&resultType=standard&cacheHint=true`)
 
         var projection = d3.geoMercator().center([-8.00, 39.60])
@@ -102,10 +94,10 @@
                             .attr("d", path)
                             .style("fill", function (d) {
                                 // console.log(d)
-                                return `rgba(200, 0, 0, ${(d.properties.ConfirmadosAcumulado_Conc / maxCases)})`;
+                                const caseOp = d.properties.ConfirmadosAcumulado_Conc / maxCases;
+                                return `rgba(200, 0, 0, ${caseOp < .05 ? .05 : caseOp})`;
                             })
                             .on("mouseover", function (d) {
-                                svg.style("stroke", "#000")
                                 tooltip.transition()
                                     .duration(300)
                                     .style("opacity", .9);
