@@ -63,10 +63,10 @@
         var svg = d3.select("#map").append("svg")
             .attr("width", width)
             .attr("height", height);
-        d3.json("caopConcelhos.json")
+        d3.json("caop.json")
             .then(topology => {
                 console.log("topojson", topology)
-                var geojson = topojson.feature(topology, topology.objects.caopConcelhos);
+                var geojson = topojson.feature(topology, topology.objects.caop);
                 console.log("geojson", geojson)
 
                 svg.selectAll("path")
