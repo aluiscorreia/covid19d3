@@ -1,21 +1,17 @@
-var width = 500,
+const width = 500,
     height = 860,
-    da = new Date();
-dn = new Date();
-da.setDate(da.getDate() - 2)
-var url = encodeURI(`https://services.arcgis.com/CCZiGSEQbAxxFVh3/arcgis/rest/services/COVID19_Concelhos_V/FeatureServer/0/query?f=json&where=ConfirmadosAcumulado_Conc>0 AND Data_Conc>=timestamp '${da.toLocaleString().replace(',', '').replace('/', '-')}' AND Data_Conc<=timestamp '${dn.toLocaleString().replace(',', '').replace('/', '-')}'&returnGeometry=false&spatialRel=esriSpatialRelIntersects&outFields=*&orderByFields=ConfirmadosAcumulado_Conc desc&resultOffset=0&resultRecordCount=318&resultType=standard&cacheHint=true`)
+    url = encodeURI(`https://services.arcgis.com/CCZiGSEQbAxxFVh3/arcgis/rest/services/COVID19_Concelhos_V/FeatureServer/0/query?f=json&where=ConfirmadosAcumulado_Conc>0&returnGeometry=false&spatialRel=esriSpatialRelIntersects&outFields=*&orderByFields=ConfirmadosAcumulado_Conc desc&resultOffset=0&resultRecordCount=318&resultType=standard&cacheHint=true`)
 
-var projection = d3.geoMercator().center([-8.00, 39.60])
+const projection = d3.geoMercator().center([-8.00, 39.60])
     .scale(7000)
-    .translate([width / 2, height / 2])
-    ,
+    .translate([width / 2, height / 2]),
     path = d3.geoPath(projection);
 
-var svg = d3.select("#map").append("svg")
+const svg = d3.select("#map").append("svg")
     .attr("width", width)
     .attr("height", height);
 
-var tooltip = d3.select("body").append("div")
+const tooltip = d3.select("body").append("div")
     .attr("class", "tooltip")
     .style("opacity", 0);
 
