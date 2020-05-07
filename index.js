@@ -3,10 +3,6 @@ const width = 500,
     url = encodeURI(`https://services.arcgis.com/CCZiGSEQbAxxFVh3/ArcGIS/rest/services/COVID19_ConcelhosDiarios/FeatureServer/0/query?f=json&where=ConfirmadosAcumulado>0&outFields=*&returnGeometry=false`)
 // url = encodeURI(`https://services.arcgis.com/CCZiGSEQbAxxFVh3/arcgis/rest/services/COVID19_Concelhos_V/FeatureServer/0/query?f=json&where=ConfirmadosAcumulado_Conc>0&returnGeometry=false&spatialRel=esriSpatialRelIntersects&outFields=*&orderByFields=ConfirmadosAcumulado_Conc desc&resultOffset=0&resultRecordCount=318&resultType=standard&cacheHint=true`)
 
-// TODO: Dados de casos confirmados por concelho:
-// https://services.arcgis.com/CCZiGSEQbAxxFVh3/ArcGIS/rest/services/COVID19_ConcelhosDiarios/FeatureServer
-// Dados de eventos ou equipamentos cancelados:
-// https://services.arcgis.com/CCZiGSEQbAxxFVh3/ArcGIS/rest/services/COVID19_Survey_vw/FeatureServer/layers
 const projection = d3.geoMercator().center([-8.00, 39.60])
     .scale(7000)
     .translate([width / 2, height / 2]),
