@@ -1,9 +1,12 @@
 const width = 500,
     height = 860,
-    url = encodeURI(`https://services.arcgis.com/CCZiGSEQbAxxFVh3/arcgis/rest/services/COVID19_Concelhos_V/FeatureServer/0/query?f=json&where=ConfirmadosAcumulado_Conc>0&returnGeometry=false&spatialRel=esriSpatialRelIntersects&outFields=*&orderByFields=ConfirmadosAcumulado_Conc desc&resultOffset=0&resultRecordCount=318&resultType=standard&cacheHint=true`)
+    url = encodeURI(`https://services.arcgis.com/CCZiGSEQbAxxFVh3/ArcGIS/rest/services/COVID19_ConcelhosDiarios/FeatureServer/0/query?f=json&where=ConfirmadosAcumulado>0&outFields=*&returnGeometry=false`)
+// url = encodeURI(`https://services.arcgis.com/CCZiGSEQbAxxFVh3/arcgis/rest/services/COVID19_Concelhos_V/FeatureServer/0/query?f=json&where=ConfirmadosAcumulado_Conc>0&returnGeometry=false&spatialRel=esriSpatialRelIntersects&outFields=*&orderByFields=ConfirmadosAcumulado_Conc desc&resultOffset=0&resultRecordCount=318&resultType=standard&cacheHint=true`)
 
 // TODO: Dados de casos confirmados por concelho:
 // https://services.arcgis.com/CCZiGSEQbAxxFVh3/ArcGIS/rest/services/COVID19_ConcelhosDiarios/FeatureServer
+// Dados de eventos ou equipamentos cancelados:
+// https://services.arcgis.com/CCZiGSEQbAxxFVh3/ArcGIS/rest/services/COVID19_Survey_vw/FeatureServer/layers
 const projection = d3.geoMercator().center([-8.00, 39.60])
     .scale(7000)
     .translate([width / 2, height / 2]),
@@ -26,14 +29,23 @@ d3.json("caop.json")
                 var geojson = topojson.feature(topology, topology.objects.onlydis);
                 // console.log("geojson", geojson)
                 let maxCases = 0;
+
+                let currentDates = [];
+                for (let i = 0; data.features.length > i; i++) {
+                    if (currentDates.find(element => element === data.features[i].attributes.Data)===undefined) currentDates.push(data.features[i].attributes.Data);
+                }
+                console.log(currentDates);
                 for (let i = 0; geojson.features.length > i; i++) {
                     for (let y = 0; data.features.length > y; y++) {
-                        if (data.features[y].attributes.Dico === geojson.features[i].properties.Dicofre.substring(0, 4)) {
-                            geojson.features[i].properties = { ...geojson.features[i].properties, ...data.features[y].attributes }
+                        if (!geojson.features[i].properties.data) geojson.features[i].properties.data = []
+                        if (data.features[y].attributes.Dicofre === geojson.features[i].properties.Dicofre.substring(0, 4)) {
+                            geojson.features[i].properties = { ...geojson.features[i].properties, data: [...geojson.features[i].properties.data, data.features[y].attributes] }
                             if (maxCases < data.features[y].attributes.ConfirmadosAcumulado_Conc) maxCases = data.features[y].attributes.ConfirmadosAcumulado_Conc
                         }
                     }
                 }
+
+                console.log(geojson);
 
                 svg.selectAll("path")
                     .data(geojson.features)
