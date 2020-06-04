@@ -4,17 +4,13 @@ body {
 
 path {
     fill: #fff;
-    stroke: rgba(0, 0, 0, 0.2);
-}
-
-path:hover {
-    stroke: #000;
 }
 
 .container {
-    width: 500px;
-    min-height: 860px;
-    margin: 2% auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
 }
 
 div.tooltip {
