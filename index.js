@@ -54,7 +54,7 @@ function processAndRender(topology, data) {
         .style("stroke", "rgba(0, 0, 0, 0.2)")
         .style("fill", function (d) {
             const caseOp = d.properties.ConfirmadosAcumulado_Conc / maxCases;
-            return `rgba(200, 0, 0, ${caseOp < .05 ? .05 : caseOp})`;
+            return `rgba(200, 0, 0, ${caseOp})`;
         })
         .on("mouseover", function (d) {
             d3.select(this).style('stroke', 'black');
@@ -76,4 +76,41 @@ function processAndRender(topology, data) {
                 .duration(300)
                 .style("opacity", 0);
         });
+
+    // Cria a escala de cores
+    const fill = d3.scaleLinear()
+        .domain([0, maxCases])
+        .range(["white", "rgba(200, 0, 0, 1)"]);
+
+    // Cria a escala
+    const x1 = d3.scaleLinear()
+        .domain([0, maxCases])
+        .range([0, width / 2.5]);
+
+    const legendAxis = d3.axisTop(x1)
+        .ticks(6)
+
+    //  Build the legend
+    const legend = svg.append('g')
+        .attr("transform", "translate(" + width * .55 + "," + (height * .98) + ")")
+        .attr('class', 'key');
+
+    legend.selectAll("rect")
+        .data(pair(x1.ticks(20)))
+        .enter().append("rect")
+        .attr("height", 20)
+        .attr("x", function (d) { return x1(d[0]); })
+        .attr("width", function (d) { return x1(d[1]) - x1(d[0]); })
+        .style("fill", function (d) { return fill(d[0]); });
+
+    legend.call(legendAxis).append("text")
+        .attr("class", "caption")
+        .attr("y", -10)
+        .text("Percentage");
+}
+
+function pair(array) {
+    return array.slice(1).map(function (b, i) {
+        return [array[i], b];
+    });
 }
