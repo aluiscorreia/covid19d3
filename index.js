@@ -30,7 +30,6 @@ d3.json(caopUrl)
             });
     }).catch(console.error);
 
-
 function processAndRender(topology, data) {
     // Chama a função feature do modulo topojson para converter o topojson para um geojson
     var geojson = topojson.feature(topology, topology.objects.onlydis);
@@ -57,7 +56,8 @@ function processAndRender(topology, data) {
             return `rgba(200, 0, 0, ${caseOp})`;
         })
         .on("mouseover", function (d) {
-            d3.select(this).style('stroke', 'black');
+            d3.select(this)
+                .style('stroke', 'black');
             tooltip.transition()
                 .duration(300)
                 .style("opacity", .9);
@@ -90,23 +90,20 @@ function processAndRender(topology, data) {
     const legendAxis = d3.axisTop(x1)
         .ticks(6)
 
-    //  Build the legend
+    //  Define a posição da legenda
     const legend = svg.append('g')
-        .attr("transform", "translate(" + width * .55 + "," + (height * .98) + ")")
-        .attr('class', 'key');
+        .attr("transform", "translate(" + width * .55 + "," + (height * .98) + ")");
 
     legend.selectAll("rect")
-        .data(pair(x1.ticks(20)))
-        .enter().append("rect")
+        .data(pair(x1.ticks(10)))
+        .enter()
+        .append("rect")
         .attr("height", 20)
         .attr("x", function (d) { return x1(d[0]); })
         .attr("width", function (d) { return x1(d[1]) - x1(d[0]); })
         .style("fill", function (d) { return fill(d[0]); });
 
-    legend.call(legendAxis).append("text")
-        .attr("class", "caption")
-        .attr("y", -10)
-        .text("Percentage");
+    legend.call(legendAxis);
 }
 
 function pair(array) {
