@@ -4,17 +4,22 @@ const width = 500,
     caopUrl = "data/caop.json",
     fixedDataUrl = "data/data.json";
 
+// Cria a projeção cartografica do mapa
 const projection = d3.geoMercator()
     .center([-8.00, 39.60])
     .scale(7000)
     .translate([width / 2, height / 2]),
     path = d3.geoPath(projection);
 
-const svg = d3.select("#map").append("svg")
+// Cria o svg principal do mapa
+const svg = d3.select("#map")
+    .append("svg")
     .attr("width", width)
     .attr("height", height);
 
-const tooltip = d3.select("body").append("div")
+// Cria a tooltip
+const tooltip = d3.select("body")
+    .append("div")
     .attr("class", "tooltip")
     .style("opacity", 0);
 
@@ -22,13 +27,11 @@ d3.json(caopUrl)
     .then(topology => {// Obtem o topojson no ficheiro caop.json
         d3.json(url)
             .then(data => processAndRender(topology, data))// Obtem os dados no url original da ESRI Portugal
-            .catch(error => { // Se não for obtidos os dados com sucesso carrega uma fonte de dados predefenidos no ficheiro data.json
-                console.error(error)
+            .catch(() => { // Se não for obtidos os dados com sucesso carrega uma fonte de dados predefenidos no ficheiro data.json
                 d3.json(fixedDataUrl)
-                    .then((data) => processAndRender(topology, data))
-                    .catch(console.error)
+                    .then((data) => processAndRender(topology, data));
             });
-    }).catch(console.error);
+    });
 
 function processAndRender(topology, data) {
     // Chama a função feature do modulo topojson para converter o topojson para um geojson
@@ -82,11 +85,12 @@ function processAndRender(topology, data) {
         .domain([0, maxCases])
         .range(["white", "rgba(200, 0, 0, 1)"]);
 
-    // Cria a escala
+    // Cria a linha da escala
     const x1 = d3.scaleLinear()
         .domain([0, maxCases])
         .range([0, width / 2.5]);
 
+    // Cria a escala
     const legendAxis = d3.axisTop(x1)
         .ticks(6)
 
